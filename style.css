@@ -37,7 +37,7 @@ button{
     width: 70px;
     font-size: 20px;
 }
-#button-zero{
+#b0{
     grid-column-start: 1;
     grid-column-end: 3;
     width: 150px;
@@ -52,11 +52,11 @@ button{
 .buttons .operandos:hover{
     background-color: rgb(252, 134, 0);
 }
-.buttons .numbers{
+.buttons .numbers, #bVirg{
     background-color: rgb(63, 63, 62);
     color: white;
 }
-.buttons .numbers:hover{
+.buttons .numbers:hover, #bVirg:hover{
     background-color: rgb(139, 134, 134);
 }
 .buttons .random{   

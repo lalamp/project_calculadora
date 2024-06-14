@@ -10,9 +10,9 @@ let count = 0;
 let operando = '';
 let estado = '';
 
-numbers.forEach(item => {
-    item.addEventListener('click', event => {
-        if(numberAtual.length > 10){
+numbers.forEach(function(item) {
+    item.addEventListener('click', () => {
+        if(numberAtual.length >= 10){
             alert('Você não pode inserir mais números');
         }
         else if(numberAtual != '0'){
@@ -26,7 +26,7 @@ numbers.forEach(item => {
     });
 });
 
-virgula.addEventListener('click', event => {
+virgula.addEventListener('click', function() {
     if(numberAtual.includes('.')){
         aux = numberAtual;
     }
@@ -53,7 +53,7 @@ function clear(){
 
     // Porcentagem
 let porcent = document.querySelector("#bPorc");
-porcent.addEventListener("click", event => {
+porcent.addEventListener("click", () => {
         result = porcentagem(parseFloat(display.textContent));
         display.textContent = result.toString();    
         if(count == 0 || estado == 'wait'){
@@ -70,7 +70,7 @@ function porcentagem(a){
 
     // Positivo e Negativo
 let posXneg = document.querySelector("#bPosNeg");
-posXneg.addEventListener("click", event => {
+posXneg.addEventListener("click", () => {
         result = positivoXnegativo(parseFloat(display.textContent));
         display.textContent = result.toString();
         if(count == 0 || estado == 'wait'){
@@ -87,7 +87,7 @@ function positivoXnegativo(a){
 
     // Soma
 let somador = document.querySelector("#bSoma");
-somador.addEventListener('click', event => {
+somador.addEventListener('click', () => {
         if(operando == '='){
             operando = '+';
             estado = 'wait';
@@ -107,7 +107,7 @@ somador.addEventListener('click', event => {
 
     // Subtração
 let subtrador = document.querySelector("#bSub");
-subtrador.addEventListener('click', event => {
+subtrador.addEventListener('click', () => {
         if(operando == '='){
             operando = '-';
             estado = 'wait';
@@ -127,7 +127,7 @@ subtrador.addEventListener('click', event => {
 
     // Multiplicação
 let multiplicador = document.querySelector("#bMult");
-multiplicador.addEventListener('click', event => {
+multiplicador.addEventListener('click', () => {
         if(operando == '='){
             operando = '*';
             estado = 'wait';
@@ -147,7 +147,7 @@ multiplicador.addEventListener('click', event => {
 
     // Divisão
 let divisor = document.querySelector("#bDiv");
-divisor.addEventListener('click', event => {
+divisor.addEventListener('click', () => {
         if(operando == '='){
             operando = '/';
             estado = 'wait';
@@ -167,7 +167,7 @@ divisor.addEventListener('click', event => {
 
     // Resultado
 let igual = document.querySelector("#bIgual");
-igual.addEventListener('click', event => {
+igual.addEventListener('click', () => {
         operacoes();
         operando = '=';
         estado = '';
@@ -186,10 +186,18 @@ function operacoes(){
     else if(operando == '/'){
         result = parseFloat(numberAntigo) / parseFloat(numberAtual);          
     }
-    display.textContent = result.toString(); 
+    
     numberAntigo = result.toString();
     numberAtual = '0';
     count++;
+
+    let resultText = result.toString().slice(0, 10);
+    if(resultText[9] == '.'){
+        display.textContent = Math.round(result);
+    } 
+    else{
+        display.textContent = resultText;
+    }
 }
 
 

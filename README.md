@@ -1,1 +1,1 @@
-Calculadora: https://lal4mp.github.io/project_calculadora/index.html
+Calculadora: https://github.com/lal4mp/project_calculadora/index.html

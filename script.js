@@ -54,8 +54,15 @@ function clear(){
     // Porcentagem
 let porcent = document.querySelector("#bPorc");
 porcent.addEventListener("click", () => {
-        result = porcentagem(parseFloat(display.textContent));
-        display.textContent = result.toString();    
+        if(numberAntigo != '0'){
+            result = parseFloat(numberAntigo) * parseFloat(numberAtual)/100;
+        }
+        else{
+            result = parseFloat(numberAtual)/100;
+        }
+
+        display.textContent = result.toString();
+
         if(count == 0 || estado == 'wait'){
             numberAtual = result.toString();
         }
@@ -63,10 +70,6 @@ porcent.addEventListener("click", () => {
             numberAntigo = result.toString();
         }   
     });
-function porcentagem(a){
-    let number = a/100;
-    return number;
-}
 
     // Positivo e Negativo
 let posXneg = document.querySelector("#bPosNeg");

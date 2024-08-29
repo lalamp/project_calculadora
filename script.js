@@ -12,8 +12,12 @@ let estado = '';
 
 numbers.forEach(function(item) {
     item.addEventListener('click', () => {
-        if(numberAtual.length >= 10){
-            alert('Você não pode inserir mais números');
+        if(numberAtual.length >= 9){
+            return
+        }
+        else if(numberAntigo != '0' && operando == '='){
+            numberAntigo = '0'
+            aux = item.textContent;
         }
         else if(numberAtual != '0'){
             aux = numberAtual + item.textContent;
@@ -21,6 +25,7 @@ numbers.forEach(function(item) {
         else{
             aux = item.textContent;
         }
+        estado = 'number';
         numberAtual = aux;
         display.textContent = numberAtual;
     });
@@ -54,28 +59,38 @@ function clear(){
     // Porcentagem
 let porcent = document.querySelector("#bPorc");
 porcent.addEventListener("click", () => {
-        if(numberAntigo != '0'){
+        if(estado == 'waiting'){
+            result = parseFloat(numberAntigo)/100;
+            numberAntigo = result.toString();
+        }
+        else if(numberAntigo != '0' && (operando == '+' || operando == '-')){
             result = parseFloat(numberAntigo) * parseFloat(numberAtual)/100;
         }
         else{
             result = parseFloat(numberAtual)/100;
         }
 
-        display.textContent = result.toString();
-
-        if(count == 0 || estado == 'wait'){
-            numberAtual = result.toString();
+        resultText = result.toString();
+        if(resultText.length > 9){
+            resultText = result.toPrecision(9)
         }
-        else{
-            numberAntigo = result.toString();
-        }   
+        if(resultText.slice(-1) == '.'){
+            resultText = Math.round(result)
+        }
+        while(resultText.includes('.') && resultText.slice(-1) == '0'){
+            resultText = resultText.replace(/(^0+(?=\d))|(,?0+$)/g, '');
+        }
+
+        numberAtual = resultText;
+        display.textContent = resultText;  
     });
 
     // Positivo e Negativo
 let posXneg = document.querySelector("#bPosNeg");
 posXneg.addEventListener("click", () => {
-        result = positivoXnegativo(parseFloat(display.textContent));
+        result = parseFloat(display.textContent)*(-1);
         display.textContent = result.toString();
+
         if(count == 0 || estado == 'wait'){
             numberAtual = result.toString();
         }
@@ -83,28 +98,27 @@ posXneg.addEventListener("click", () => {
             numberAntigo = result.toString();
         }   
     });
-function positivoXnegativo(a){
-    let number = a*(-1);
-    return number;
-}
 
     // Soma
 let somador = document.querySelector("#bSoma");
 somador.addEventListener('click', () => {
         if(operando == '='){
             operando = '+';
-            estado = 'wait';
+            estado = 'waiting';
         }
-        if(operando != ''){
+        else if(operando != '' && estado == 'waiting'){
+            operando = '+';
+        }
+        else if(operando != ''){
             operacoes();
             operando = '+';
-            estado = 'wait';
+            estado = 'waiting';
         }
         else{
             numberAntigo = numberAtual;
             numberAtual = '0';
             operando = '+';
-            estado = 'wait';
+            estado = 'waiting';
         }
     });
 
@@ -113,18 +127,21 @@ let subtrador = document.querySelector("#bSub");
 subtrador.addEventListener('click', () => {
         if(operando == '='){
             operando = '-';
-            estado = 'wait';
+            estado = 'waiting';
         }
-        if(operando != ''){
+        else if(operando != '' && estado == 'waiting'){
+            operando = '-';
+        }
+        else if(operando != ''){
             operacoes();
             operando = '-';
-            estado = 'wait';
+            estado = 'waiting';
         }
         else{
             numberAntigo = numberAtual;
             numberAtual = '0';
             operando = '-';
-            estado = 'wait';
+            estado = 'waiting';
         }
     });
 
@@ -133,18 +150,21 @@ let multiplicador = document.querySelector("#bMult");
 multiplicador.addEventListener('click', () => {
         if(operando == '='){
             operando = '*';
-            estado = 'wait';
+            estado = 'waiting';
+        }
+        else if(operando != '' && estado == 'waiting'){
+            operando = '*';
         }
         else if(operando != ''){
             operacoes();
             operando = '*';
-            estado = 'wait';
+            estado = 'waiting';
         }
         else{
             numberAntigo = numberAtual;
             numberAtual = '0';
             operando = '*';
-            estado = 'wait';
+            estado = 'waiting';
         }
     });
 
@@ -153,18 +173,21 @@ let divisor = document.querySelector("#bDiv");
 divisor.addEventListener('click', () => {
         if(operando == '='){
             operando = '/';
-            estado = 'wait';
+            estado = 'waiting';
+        }
+        else if(operando != '' && estado == 'waiting'){
+            operando = '/';
         }
         else if(operando != ''){
             operacoes();
             operando = '/';
-            estado = 'wait';
+            estado = 'waiting';
         }
         else{
             numberAntigo = numberAtual;
             numberAtual = '0';
             operando = '/';
-            estado = 'wait';
+            estado = 'waiting';
         }
     });
 
@@ -173,7 +196,6 @@ let igual = document.querySelector("#bIgual");
 igual.addEventListener('click', () => {
         operacoes();
         operando = '=';
-        estado = '';
     });
 
 function operacoes(){
@@ -190,17 +212,22 @@ function operacoes(){
         result = parseFloat(numberAntigo) / parseFloat(numberAtual);          
     }
     
-    numberAntigo = result.toString();
-    numberAtual = '0';
-    count++;
-
-    let resultText = result.toString().slice(0, 10);
-    if(resultText[9] == '.'){
-        display.textContent = Math.round(result);
-    } 
-    else{
-        display.textContent = resultText;
+    resultText = result.toString();
+    if(resultText.length > 9){
+        resultText = result.toPrecision(9)
     }
+    if(resultText.slice(-1) == '.'){
+        resultText = Math.round(result)
+    }
+    while(resultText.includes('.') && resultText.slice(-1) == '0'){
+        resultText = resultText.replace(/(^0+(?=\d))|(,?0+$)/g, '');
+    }
+
+    numberAntigo = resultText;
+    numberAtual = '0';
+    display.textContent = resultText;
+    count++;
+    estado = 'done';
 }
 
 

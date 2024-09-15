@@ -60,14 +60,20 @@ function clear(){
 let porcent = document.querySelector("#bPorc");
 porcent.addEventListener("click", () => {
         if(estado == 'waiting'){
+            result = parseFloat(numberAntigo) * parseFloat(numberAntigo)/100;
+            numberAtual = result.toString();
+        }
+        else if(estado == 'done'){
             result = parseFloat(numberAntigo)/100;
             numberAntigo = result.toString();
         }
         else if(numberAntigo != '0' && (operando == '+' || operando == '-')){
             result = parseFloat(numberAntigo) * parseFloat(numberAtual)/100;
+            numberAtual = result.toString();
         }
         else{
             result = parseFloat(numberAtual)/100;
+            numberAtual = result.toString();
         }
 
         resultText = result.toString();
@@ -80,8 +86,6 @@ porcent.addEventListener("click", () => {
         while(resultText.includes('.') && resultText.slice(-1) == '0'){
             resultText = resultText.replace(/(^0+(?=\d))|(,?0+$)/g, '');
         }
-
-        numberAtual = resultText;
         display.textContent = resultText;  
     });
 
